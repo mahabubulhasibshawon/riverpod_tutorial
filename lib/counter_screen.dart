@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final counter = StateProvider((ref) {
+final counter = StateProvider<int>((ref) {
   return 0;
 });
+
+final themeProviderLight = StateProvider((ref) {
+  return ThemeData.light();
+});
+
 
 class CounterScreen extends ConsumerStatefulWidget {
   const CounterScreen({super.key});
@@ -15,6 +20,7 @@ class CounterScreen extends ConsumerStatefulWidget {
 class _CounterScreenState extends ConsumerState<CounterScreen> {
   @override
   Widget build(BuildContext context) {
+    print('object');
     return Scaffold(
       body: Column(
         children: [
@@ -32,7 +38,10 @@ class _CounterScreenState extends ConsumerState<CounterScreen> {
                 ref.read(counter.notifier).state --;
               }, child: Text('-', style: TextStyle(fontSize: 50),))
             ],
-          )
+          ),
+          Switch(value: ref.watch(themeProviderLight) == ThemeData.dark(), onChanged: (value) {
+            ref.read(themeProviderLight.notifier).state = ref.read(themeProviderLight) == ThemeData.light() ? ThemeData.dark() : ThemeData.light();
+          })
         ],
       ),
     );
